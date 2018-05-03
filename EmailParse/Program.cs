@@ -10,11 +10,10 @@ namespace EmailParse
     {
         static void Main(string[] args)
         {
-            // parse the csv/xls/delimited file and return an array of the individual cells
-            List<string> emails = Parse.ParseInput();
+            string file_path = @"C:\Users\nwolf\Documents\RawDataList_WithEmailAddresses.csv";
 
-            // parse the individual cells and write the output to a csv file
-            Parse.ParseEmails(emails);
+            // parse the csv file given in the path, determine bad email addresses, and output the results in two csv files
+            Parse.ParseInput(file_path);
 
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();

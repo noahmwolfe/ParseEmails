@@ -7,55 +7,60 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
 
+
 namespace EmailParse
 {
     public class Parse
     {
-        static public List<string> ParseInput()
+        static public void ParseInput(string file_path)
         {
-
-            List<string> output = new List<string>();
-
-                using (var reader = new StreamReader(@"C:\Users\nwolf\Documents\test.csv"))
-                {
-
-                    while (!reader.EndOfStream)
-                    {
-                        var line = reader.ReadLine();
-                        var emails = line.Split(',');
-                        for(int i = 0; i < emails.Length; ++i)
-                        {
-                            output.Add(emails[i]);
-                        }
-                    }
-                }
-            
-
-            return output;
-        }
-
-        static public void ParseEmails(List<string> all_emails)
-        {
+            // csv for good and bad email addresses
             var good_csv = new StringBuilder();
             var bad_csv = new StringBuilder();
 
-            Regex r = new Regex(@"^([a-z0-9][-a-z0-9_\+\.]*[a-z0-9])@([a-z0-9][-a-z0-9\.]*[a-z0-9]\.(arpa|root|aero|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel)|([0-9]{1,3}\.{3}[0-9]{1,3}))");
+            // hash set to determine if the ID has been seen before
+            HashSet<string> id_set = new HashSet<string>();
 
-            for (int i = 0; i < all_emails.Count; ++i)
+            // regex expression to filter out the majority of bad email addresses
+            Regex r = new Regex(@"^([a-z0-9][-a-z0-9_\+\.]*[a-z0-9])@(([a-z0-9][-a-z0-9\.]*[a-z0-9]|q|g)\.(arpa|root|aero|biz|cat|cc|co|com|coop|edu|fm|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|tv|us|ws)|([0-9]{1,3}\.{3}[0-9]{1,3}))");
+
+            Console.WriteLine("Working...");
+
+            // read in each row in the csv and parse
+            using (var reader = new StreamReader(file_path))
             {
-                Console.WriteLine(all_emails[i]);
 
-                Match m = r.Match(all_emails[i]);
-                if (m.Success)
+                while (!reader.EndOfStream)
                 {
-                    Console.WriteLine("Is an email address");
-                    good_csv.AppendLine(string.Join(",", all_emails[i]));
-                } else
-                {
-                    Console.WriteLine("not an email address");
-                    bad_csv.AppendLine(string.Join(",", all_emails[i]));
+
+                    var line = reader.ReadLine();
+                    var emails = line.Split(',');
+                    // check if the email address has white space at the beginning (many did) and remove if it does (screws up regex otherwise)
+                    if (Char.IsWhiteSpace(emails[6][0]))
+                    {
+                        emails[6] = emails[6].Substring(1);
+                    }
+
+                    // attempt to add the ID to the hash set and determine if it has been seen before
+                    if (id_set.Add(emails[0]))
+                    {
+                        // determine if the regex is a match (email address needs to be in lowercase only) and append the original line to the respective csv
+                        Match m = r.Match(emails[6].ToLower());
+                        if (m.Success)
+                        {
+                            good_csv.AppendLine(line);
+                        }
+                        else
+                        {
+                            bad_csv.AppendLine(line);
+                        }
+                    }
                 }
             }
+
+            Console.WriteLine("Finished!");
+
+            // write the results to the respective csv files
             File.WriteAllText(@"C:\Users\nwolf\Documents\good_emails.csv", good_csv.ToString());
             File.WriteAllText(@"C:\Users\nwolf\Documents\bad_emails.csv", bad_csv.ToString());
         }
