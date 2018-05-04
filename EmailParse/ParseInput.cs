@@ -17,6 +17,7 @@ namespace EmailParse
             // csv for good and bad email addresses
             var good_csv = new StringBuilder();
             var bad_csv = new StringBuilder();
+            var duplicate_csv = new StringBuilder();
 
             // hash set to determine if the ID has been seen before
             HashSet<string> id_set = new HashSet<string>();
@@ -55,6 +56,10 @@ namespace EmailParse
                             bad_csv.AppendLine(line);
                         }
                     }
+                    else
+                    {
+                        duplicate_csv.AppendLine(line);
+                    }
                 }
             }
 
@@ -63,6 +68,7 @@ namespace EmailParse
             // write the results to the respective csv files
             File.WriteAllText(@"C:\Users\nwolf\Documents\good_emails.csv", good_csv.ToString());
             File.WriteAllText(@"C:\Users\nwolf\Documents\bad_emails.csv", bad_csv.ToString());
+            File.WriteAllText(@"C:\Users\nwolf\Documents\duplicate_emails.csv", duplicate_csv.ToString());
         }
     }
 }
