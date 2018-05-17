@@ -37,16 +37,16 @@ namespace EmailParse
                     var line = reader.ReadLine();
                     var emails = line.Split(',');
                     // check if the email address has white space at the beginning (many did) and remove if it does (screws up regex otherwise)
-                    if (Char.IsWhiteSpace(emails[6][0]))
+                    if (Char.IsWhiteSpace(emails[7][0]))
                     {
-                        emails[6] = emails[6].Substring(1);
+                        emails[7] = emails[7].Substring(1);
                     }
 
                     // attempt to add the ID to the hash set and determine if it has been seen before
                     if (id_set.Add(emails[0]))
                     {
                         // determine if the regex is a match (email address needs to be in lowercase only) and append the original line to the respective csv
-                        Match m = r.Match(emails[6].ToLower());
+                        Match m = r.Match(emails[7].ToLower());
                         if (m.Success)
                         {
                             good_csv.AppendLine(line);
