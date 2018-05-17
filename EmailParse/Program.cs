@@ -10,7 +10,7 @@ namespace EmailParse
     {
         static void Main(string[] args)
         {
-            string file_path = @"C:\Users\nwolf\Documents\RawDataList_WithEmailAddresses.csv";
+            string file_path = @"C:\Users\nwolf\Documents\EmailAddressFile_20180516.csv";
 
             // parse the csv file given in the path, determine bad email addresses, and output the results in two csv files
             Parse.ParseInput(file_path);

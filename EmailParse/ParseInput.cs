@@ -23,7 +23,7 @@ namespace EmailParse
             HashSet<string> id_set = new HashSet<string>();
 
             // regex expression to filter out the majority of bad email addresses
-            Regex r = new Regex(@"^([a-z0-9][-a-z0-9_\+\.]*[a-z0-9])@(([a-z0-9][-a-z0-9\.]*[a-z0-9]|q|g)\.(arpa|root|aero|biz|cat|cc|co|com|coop|edu|fm|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|tv|us|ws)|([0-9]{1,3}\.{3}[0-9]{1,3}))");
+            Regex r = new Regex(@"^([a-z0-9][-a-z0-9_\+\.\-]*[a-z0-9_$!])@(([a-z0-9][-a-z0-9\.]*[a-z0-9]|q|g)\.(arpa|root|aero|biz|cat|cc|co|com|coop|edu|fm|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|tv|us|ws)|([0-9]{1,3}\.{3}[0-9]{1,3}))");
 
             Console.WriteLine("Working...");
 
@@ -66,9 +66,9 @@ namespace EmailParse
             Console.WriteLine("Finished!");
 
             // write the results to the respective csv files
-            File.WriteAllText(@"C:\Users\nwolf\Documents\good_emails.csv", good_csv.ToString());
-            File.WriteAllText(@"C:\Users\nwolf\Documents\bad_emails.csv", bad_csv.ToString());
-            File.WriteAllText(@"C:\Users\nwolf\Documents\duplicate_emails.csv", duplicate_csv.ToString());
+            File.WriteAllText(@"C:\Users\nwolf\Documents\good_emails_2.csv", good_csv.ToString());
+            File.WriteAllText(@"C:\Users\nwolf\Documents\bad_emails_2.csv", bad_csv.ToString());
+            File.WriteAllText(@"C:\Users\nwolf\Documents\duplicate_emails_2.csv", duplicate_csv.ToString());
         }
     }
 }
